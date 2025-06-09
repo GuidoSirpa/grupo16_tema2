@@ -81,29 +81,80 @@
     </button>
   </div>
 
-  <!-- FORMULARIO DE RESERVA -->
-  <section class="formulario p-4">
-    <form class="form">
-      <div class="mb-3">
-        <label class="form-label">FECHA DE LLEGADA *</label>
-        <input type="date" class="form-control" required>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">FECHA DE SALIDA *</label>
-        <input type="date" class="form-control" required>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">HABITACIÓN *</label>
-        <select class="form-select">
-          <option selected disabled>Seleccionar</option>
-          <option>Estándar</option>
-          <option>Suite</option>
-          <option>Kitchenette</option>
-        </select>
-      </div>
-      <button type="submit" class="btn btn-primary">Ver Disponibilidad</button>
-    </form>
-  </section>
+  <!-- INFORMACION -->
+  <!-- SECCIÓN 1: Imagen a la izquierda, texto a la derecha -->
+<section class="container my-5">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <img src="imagen/3.png" alt="Servicio 1" class="img-fluid rounded">
+    </div>
+    <div class="col-md-6">
+      <h2 class="mb-3">Comodidad y Lujo</h2>
+      <p>
+        Disfruta de habitaciones totalmente equipadas con un diseño moderno y elegante, 
+        pensadas para ofrecerte una experiencia inolvidable durante tu estadía.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN 2: Texto a la izquierda, imagen a la derecha -->
+<section class="container my-5">
+  <div class="row align-items-center">
+    <div class="col-md-6 order-md-2">
+      <img src="imagen/4.png" alt="Servicio 2" class="img-fluid rounded">
+    </div>
+    <div class="col-md-6 order-md-1">
+      <h2 class="mb-3">Atención Personalizada</h2>
+      <p>
+        Nuestro equipo está disponible las 24 horas para garantizar tu comodidad. 
+        Nos esforzamos por ofrecer un servicio cálido y profesional a todos nuestros huéspedes.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- SECCIÓN 3: Texto sobre imagen de fondo -->
+<section class="my-5 position-relative text-white" style="background-image: url('imagen/5.png'); background-size: cover; background-position: center; height: 400px;">
+  <div class="container h-100 d-flex align-items-center">
+    <div class="bg-dark bg-opacity-50 p-4 rounded">
+      <h2 class="mb-3">Gastronomía de Primera</h2>
+      <p class="mb-0">
+        Descubre sabores únicos con nuestra cocina de autor. Ofrecemos una experiencia gastronómica 
+        con productos frescos y menús para todos los gustos.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN 4: Texto sobre otra imagen -->
+<section class="my-5 position-relative text-white" style="background-image: url('imagen/6.png'); background-size: cover; background-position: center; height: 400px;">
+  <div class="container h-100 d-flex align-items-center justify-content-end">
+    <div class="bg-dark bg-opacity-50 p-4 rounded text-end">
+      <h2 class="mb-3">Spa y Bienestar</h2>
+      <p class="mb-0">
+        Relájate en nuestro spa con tratamientos personalizados, sauna, masajes y piscina climatizada. 
+        Perfecto para desconectarte y renovar energías.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- MAPA GOOGLE MAPS -->
+<section class="container my-5">
+  <h2 class="mb-4 text-center">HOTELES EN EL AREA</h2>
+  <div class="ratio ratio-16x9">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.086503964339!2d-122.42067938468184!3d37.778519779758804!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085808c632f68e3%3A0x89f7ef0d8db21f14!2sHotel%20Demo!5e0!3m2!1ses!2sus!4v1600000000000!5m2!1ses!2sus"
+      width="600"
+      height="450"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+</section>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
