@@ -9,9 +9,7 @@ def registro(request):
         if form.is_valid():
             usuario = form.save()
             login(request, usuario)
-            return redirect('login')  # O a donde quieras redirigir
+            return redirect('perfil_usuario') 
     else:
         form = UserCreationForm()
     return render(request, 'registro/registro.html', {'form': form})
-
-

@@ -1,58 +1,50 @@
-{% extends 'labase.html' %}
-{% load static %}
+{% extends "base.html" %}
+
+{% block title %}Mis Reservas{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2 class="mb-4">Mis Reservas</h2>
-  {% if reservas %}
-    <div class="table-responsive">
-      <table class="table table-striped table-hover align-middle">
-        <thead class="table-primary">
-          <tr>
-            <th scope="col">Habitación</th>
-            <th scope="col">Fecha de Entrada</th>
-            <th scope="col">Fecha de Salida</th>
-            <th scope="col">Fecha Reserva</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Comentarios</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for reserva in reservas %}
-          <tr>
-            <td>{{ reserva.habitacion }}</td>
-            <td>{{ reserva.fecha_entrada }}</td>
-            <td>{{ reserva.fecha_salida }}</td>
-            <td>{{ reserva.fecha_reserva }}</td>
-            <td>
-              <span class="badge 
-                {% if reserva.estado == 'confirmada' %}bg-success
-                {% elif reserva.estado == 'pendiente' %}bg-warning text-dark
-                {% elif reserva.estado == 'cancelada' %}bg-danger
-                {% else %}bg-secondary{% endif %}">
-                {{ reserva.get_estado_display }}
-              </span>
-            </td>
-            <td>{{ reserva.comentarios }}</td>
-            <td>
-              <!-- ACCIONES -->
-              {# Si tienes vista de detalles, descomenta la siguiente línea #}
-              {# <a href="{% url 'detalle_reserva' reserva.id %}" class="btn btn-outline-info btn-sm">Ver detalles</a> #}
-              {% if reserva.estado == 'pendiente' %}
-                <a href="{% url 'cancelar_reserva' reserva.id %}" class="btn btn-outline-danger btn-sm"
-                  onclick="return confirm('¿Estás seguro de cancelar esta reserva?');">Cancelar</a>
-                {# Si implementas edición, descomenta: #}
-                {# <a href="{% url 'editar_reserva_cliente' reserva.id %}" class="btn btn-outline-warning btn-sm">Editar</a> #}
-              {% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  {% else %}
-    <div class="alert alert-info">No tienes reservas registradas.</div>
-  {% endif %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Mis Reservas</h2>
+  <a href="{% url 'crear_reserva' %}" class="btn btn-success">
+    + Nueva Reserva
+  </a>
 </div>
+
+{% if reservas %}
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Habitación</th>
+          <th>Fecha Entrada</th>
+          <th>Fecha Salida</th>
+          <th>Número de Personas</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for reserva in reservas %}
+        <tr>
+          <td>{{ reserva.habitacion }}</td>
+          <td>{{ reserva.fecha_entrada }}</td>
+          <td>{{ reserva.fecha_salida }}</td>
+          <td>{{ reserva.numero_personas }}</td>
+          <td>
+            {% if reserva.cancelada %}
+              <span class="badge bg-danger">Cancelada</span>
+            {% else %}
+              <span class="badge bg-success">Activa</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="alert alert-info">
+    No tienes reservas registradas.
+  </div>
+{% endif %}
+
 {% endblock %}

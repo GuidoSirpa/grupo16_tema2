@@ -10,7 +10,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">
-          {% if cliente %}Actualizar perfil{% else %}Completar perfil{% endif %}
+          {% if cliente and cliente.perfil_confirmado %}Actualizar perfil{% else %}Confirmar perfil{% endif %}
         </button>
       </form>
     </div>

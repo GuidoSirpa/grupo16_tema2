@@ -57,18 +57,17 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'index' %}">Inicio</a>
             </li>
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'perfil_usuario' %}"
-                >Mi Perfil</a
-              >
+            {% if user.is_authenticated and not user.is_staff %}
+            <li>
+              <a class="nav-link" href="{% url 'perfil_usuario' %}">Perfil</a>
             </li>
-            <li class="nav-item">
+            {% endif %} {% if user.is_authenticated and not user.is_staff %}
+            <li>
               <a class="nav-link" href="{% url 'mis_reservas' %}"
                 >Mis Reservas</a
               >
             </li>
-            {% if user.is_staff %}
+            {% endif %} {% if user.is_staff %}
 
             <li class="nav-item">
               <a class="nav-link" href="{% url 'lista_cliente' %}"
@@ -90,7 +89,7 @@
                 >Lista Reserva</a
               >
             </li>
-            {% endif %} {% endif %}
+            {% endif %}
           </ul>
           <div class="d-flex align-items-center">
             {% if user.is_authenticated %}
@@ -185,7 +184,7 @@
     </div>
 
     <!-- FORMULARIO DE RESERVA -->
-    <section class="formulario p-4 mt-3"  >
+    <section class="formulario p-4 mt-3">
       <form class="form" method="post" action="{% url 'index' %}">
         {% csrf_token %}
         <div class="mb-3">
@@ -222,7 +221,7 @@
         </button>
       </form>
     </section>
-    <section class="text-center  ">
+    <section class="text-center">
       {% if habitaciones_disponibles != None %}
       <hr />
       <h4 class="mb-4">Habitaciones Disponibles</h4>

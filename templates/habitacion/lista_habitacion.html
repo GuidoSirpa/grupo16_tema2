@@ -1,47 +1,150 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+  body {
+    background: linear-gradient(to right, #fbd3e9, #bbdefb);
+    font-family: 'Roboto', sans-serif;
+  }
+
+  h1, h2 {
+    text-align: center;
+    color: #007bff;
+    font-weight: bold;
+    margin-top: 30px;
+  }
+
+  table {
+    margin: 30px auto;
+    border-collapse: collapse;
+    width: 95%;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  th, td {
+    text-align: center;
+    padding: 12px;
+  }
+
+  th {
+    background-color: #bbdefb;
+    color: #000;
+    font-weight: 600;
+  }
+
+  tr:nth-child(even) {
+    background-color: #fbd3e9;
+  }
+
+  .btn-accion {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+  }
+
+  .btn-editar {
+    background: linear-gradient(to right, #64b5f6, #2196f3);
+    color: white;
+  }
+
+  .btn-editar:hover {
+    background: linear-gradient(to right, #42a5f5, #1e88e5);
+  }
+
+  .btn-eliminar {
+    background: linear-gradient(to right, #f48fb1, #f06292);
+    color: white;
+  }
+
+  .btn-eliminar:hover {
+    background: linear-gradient(to right, #ec407a, #d81b60);
+  }
+
+  .btn-guardar {
+    background: linear-gradient(to right, #81d4fa, #0288d1);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+
+  .btn-guardar:hover {
+    background: linear-gradient(to right, #4fc3f7, #0277bd);
+  }
+
+  .btn-cancelar {
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 10px 18px;
+    border-radius: 10px;
+    margin-left: 10px;
+    text-decoration: none;
+  }
+
+  .btn-cancelar:hover {
+    background-color: #bdbdbd;
+  }
+
+  .card-form {
+    background-color: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    max-width: 700px;
+    margin: auto;
+    margin-top: 40px;
+  }
+</style>
+
 <h1>Habitaciones</h1>
 
-<table border="1" cellpadding="8" cellspacing="0">
-    <thead>
-        <tr>
-            <th>Número</th>
-            <th>Tipo</th>
-            <th>Disponible</th>
-            <th>Piso</th>
-            <th>Descripción</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for habitacion in habitaciones %}
-        <tr>
-            <td>{{ habitacion.numero }}</td>
-            <td>{{ habitacion.tipo }}</td>
-            <td>{{ habitacion.disponible|yesno:"Sí,No" }}</td>
-            <td>{{ habitacion.piso }}</td>
-            <td>{{ habitacion.descripcion }}</td>
-            <td>
-                <a href="{% url 'editar_habitacion' habitacion.id %}">Editar</a> |
-                <a href="{% url 'eliminar_habitacion' habitacion.id %}" onclick="return confirm('¿Eliminar esta habitación?');">Eliminar</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
+<table>
+  <thead>
+    <tr>
+      <th>Número</th>
+      <th>Tipo</th>
+      <th>Disponible</th>
+      <th>Piso</th>
+      <th>Descripción</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for habitacion in habitaciones %}
+    <tr>
+      <td>{{ habitacion.numero }}</td>
+      <td>{{ habitacion.tipo }}</td>
+      <td>{{ habitacion.disponible|yesno:"Sí,No" }}</td>
+      <td>{{ habitacion.piso }}</td>
+      <td>{{ habitacion.descripcion }}</td>
+      <td>
+        <a href="{% url 'editar_habitacion' habitacion.id %}" class="btn-accion btn-editar">Editar</a>
+        <a href="{% url 'eliminar_habitacion' habitacion.id %}" class="btn-accion btn-eliminar" onclick="return confirm('¿Eliminar esta habitación?');">Eliminar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 
-<br><br>
-
-<h2>{{ accion }} Habitación</h2>
-
-<form method="post">
+<div class="card-form">
+  <h2>{{ accion }} Habitación</h2>
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">{{ accion }}</button>
-    {% if editando %}
-        <a href="{% url 'lista_habitacion' %}">Cancelar</a>
-    {% endif %}
-</form>
-
+    <div class="text-center mt-3">
+      <button type="submit" class="btn-guardar">{{ accion }}</button>
+      {% if editando %}
+        <a href="{% url 'lista_habitacion' %}" class="btn-cancelar">Cancelar</a>
+      {% endif %}
+    </div>
+  </form>
+</div>
 {% endblock %}
