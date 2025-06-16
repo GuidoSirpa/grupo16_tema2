@@ -3,15 +3,16 @@
 
 {% block content %}
 <div class="container mt-4">
-  <h2 class="mb-4 text-primary">Mi Perfil</h2>
-  <div class="card shadow-sm" style="max-width: 500px;">
+  <h2 class="mb-4">Mi Perfil</h2>
+  <div class="card">
     <div class="card-body">
-      <h5 class="card-title mb-3"><i class="bi bi-person-circle"></i> {{ user.username }}</h5>
-      <p class="mb-1"><strong>Correo:</strong> {{ user.email }}</p>
-      <p class="mb-1"><strong>Nombre:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-      <p class="mb-3"><strong>Fecha de registro:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
-      {% comment %} <a href="{% url 'editar_perfil' %}" class="btn btn-outline-primary btn-sm">Editar Perfil</a>
-      <a href="{% url 'cambiar_password' %}" class="btn btn-outline-secondary btn-sm">Cambiar Contraseña</a> {% endcomment %}
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">
+          {% if cliente %}Actualizar perfil{% else %}Completar perfil{% endif %}
+        </button>
+      </form>
     </div>
   </div>
 </div>

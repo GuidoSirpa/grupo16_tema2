@@ -41,7 +41,9 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <a class="navbar-brand text-primary fw-bold" href="{% url 'index' %}">Y<span>Hoteles</span></a>
+        <a class="navbar-brand text-primary fw-bold" href="{% url 'index' %}"
+          >Y<span>Hoteles</span></a
+        >
         <button
           class="navbar-toggler"
           type="button"
@@ -61,7 +63,7 @@
                 >Mi Perfil</a
               >
             </li>
-            <li class="nav-item" >
+            <li class="nav-item">
               <a class="nav-link" href="{% url 'mis_reservas' %}"
                 >Mis Reservas</a
               >
@@ -123,12 +125,12 @@
     </nav>
 
     <div class="container mt-4">
-      <h1 class='text-primary'>
+      <h1 class="text-primary">
         Bienvenido{% if user.is_authenticated %}, {{ user.username }}{% endif %}
         al Hotel
       </h1>
       {% if user.is_authenticated %}
-      <p >Puedes ver y gestionar tus reservas desde el menú.</p>
+      <p>Puedes ver y gestionar tus reservas desde el menú.</p>
       {% if user.is_staff %}
       <p>
         Como administrador, tienes acceso a las opciones de administración del
@@ -183,23 +185,36 @@
     </div>
 
     <!-- FORMULARIO DE RESERVA -->
-    <section class="formulario p-4 mt-3">
-      <form class="form">
+    <section class="formulario p-4 mt-3"  >
+      <form class="form" method="post" action="{% url 'index' %}">
+        {% csrf_token %}
         <div class="mb-3">
           <label class="form-label">FECHA DE LLEGADA *</label>
-          <input type="date" class="form-control" required />
+          <input
+            type="date"
+            class="form-control"
+            name="fecha_entrada"
+            id="fecha_entrada"
+            required
+          />
         </div>
         <div class="mb-3">
           <label class="form-label">FECHA DE SALIDA *</label>
-          <input type="date" class="form-control" required />
+          <input
+            type="date"
+            class="form-control"
+            name="fecha_salida"
+            id="fecha_salida"
+            required
+          />
         </div>
         <div class="mb-3">
           <label class="form-label">HABITACIÓN *</label>
-          <select class="form-select">
+          <select class="form-select" name="tipo_habitacion" required>
             <option selected disabled>Seleccionar</option>
-            <option>Estándar</option>
-            <option>Suite</option>
-            <option>Kitchenette</option>
+            {% for tipo in tipos_habitacion %}
+            <option value="{{ tipo.id }}">{{ tipo.nombre }}</option>
+            {% endfor %}
           </select>
         </div>
         <button type="submit" class="btn btn-primary">
@@ -207,7 +222,37 @@
         </button>
       </form>
     </section>
-
+    <section class="text-center  ">
+      {% if habitaciones_disponibles != None %}
+      <hr />
+      <h4 class="mb-4">Habitaciones Disponibles</h4>
+      {% if habitaciones_disponibles %}
+      <div class="row justify-content-center">
+        {% for h in habitaciones_disponibles %}
+        <div class="col-md-4 mb-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title">Habitación {{ h.numero }}</h5>
+              <p class="card-text mb-1"><strong>Tipo:</strong> {{ h.tipo }}</p>
+              <p class="card-text mb-1"><strong>Piso:</strong> {{ h.piso }}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="alert alert-warning mt-4" role="alert">
+        No hay habitaciones disponibles para ese rango.
+      </div>
+      {% endif %} {% endif %}
+    </section>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var hoy = new Date().toISOString().split("T")[0];
+        document.getElementById("fecha_entrada").value = hoy;
+        document.getElementById("fecha_salida").value = hoy;
+      });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

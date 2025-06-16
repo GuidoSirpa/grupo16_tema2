@@ -10,9 +10,11 @@
         <thead class="table-primary">
           <tr>
             <th scope="col">Habitación</th>
-            <th scope="col">Fecha de Llegada</th>
+            <th scope="col">Fecha de Entrada</th>
             <th scope="col">Fecha de Salida</th>
+            <th scope="col">Fecha Reserva</th>
             <th scope="col">Estado</th>
+            <th scope="col">Comentarios</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -20,18 +22,28 @@
           {% for reserva in reservas %}
           <tr>
             <td>{{ reserva.habitacion }}</td>
-            <td>{{ reserva.fecha_llegada }}</td>
+            <td>{{ reserva.fecha_entrada }}</td>
             <td>{{ reserva.fecha_salida }}</td>
+            <td>{{ reserva.fecha_reserva }}</td>
             <td>
-              <span class="badge {% if reserva.estado == 'Confirmada' %}bg-success{% elif reserva.estado == 'Pendiente' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
-                {{ reserva.estado }}
+              <span class="badge 
+                {% if reserva.estado == 'confirmada' %}bg-success
+                {% elif reserva.estado == 'pendiente' %}bg-warning text-dark
+                {% elif reserva.estado == 'cancelada' %}bg-danger
+                {% else %}bg-secondary{% endif %}">
+                {{ reserva.get_estado_display }}
               </span>
             </td>
+            <td>{{ reserva.comentarios }}</td>
             <td>
-              <!-- Puedes ajustar los botones según tus necesidades -->
-              <a href="{% url 'detalle_reserva' reserva.id %}" class="btn btn-outline-info btn-sm">Ver detalles</a>
-              {% if reserva.estado == 'Pendiente' %}
-                <a href="{% url 'cancelar_reserva' reserva.id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Estás seguro de cancelar esta reserva?');">Cancelar</a>
+              <!-- ACCIONES -->
+              {# Si tienes vista de detalles, descomenta la siguiente línea #}
+              {# <a href="{% url 'detalle_reserva' reserva.id %}" class="btn btn-outline-info btn-sm">Ver detalles</a> #}
+              {% if reserva.estado == 'pendiente' %}
+                <a href="{% url 'cancelar_reserva' reserva.id %}" class="btn btn-outline-danger btn-sm"
+                  onclick="return confirm('¿Estás seguro de cancelar esta reserva?');">Cancelar</a>
+                {# Si implementas edición, descomenta: #}
+                {# <a href="{% url 'editar_reserva_cliente' reserva.id %}" class="btn btn-outline-warning btn-sm">Editar</a> #}
               {% endif %}
             </td>
           </tr>
