@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Reserva
-from .forms import ReservaForm
-
+from .forms import ReservaFormAdmin, ReservaForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from habitacion.models import Habitacion
@@ -66,9 +65,9 @@ def consultar_disponibilidad(request):
 @staff_member_required
 def lista_reserva(request):
     reservas = Reserva.objects.all()
-    form = ReservaForm()
+    form = ReservaFormAdmin()
     if request.method == 'POST':
-        form = ReservaForm(request.POST)
+        form = ReservaFormAdmin(request.POST)
         if form.is_valid():
             form.save()
             return redirect('lista_reserva')
@@ -79,16 +78,17 @@ def lista_reserva(request):
         'accion': 'Agregar',
         'editando': False
     })
+
 @staff_member_required
 def editar_reserva(request, reserva_id):
     reserva = get_object_or_404(Reserva, id=reserva_id)
     if request.method == 'POST':
-        form = ReservaForm(request.POST, instance=reserva)
+        form = ReservaFormAdmin(request.POST, instance=reserva)
         if form.is_valid():
             form.save()
             return redirect('lista_reserva')
     else:
-        form = ReservaForm(instance=reserva)
+        form = ReservaFormAdmin(instance=reserva)
 
     reservas = Reserva.objects.all()
     return render(request, 'reserva/lista_reserva.html', {
@@ -97,6 +97,7 @@ def editar_reserva(request, reserva_id):
         'accion': 'Editar',
         'editando': True
     })
+
 @staff_member_required
 def eliminar_reserva(request, reserva_id):
     reserva = get_object_or_404(Reserva, id=reserva_id)
@@ -105,7 +106,6 @@ def eliminar_reserva(request, reserva_id):
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
-
 
 @login_required
 def mis_reservas(request):
@@ -120,7 +120,6 @@ def mis_reservas(request):
         return redirect('perfil_usuario')
     reservas = Reserva.objects.filter(cliente=cliente)
     return render(request, 'cliente/mis_reservas.html', {'reservas': reservas})
-
 
 @login_required
 def reservar(request):
@@ -144,20 +143,24 @@ def reservar(request):
 
 @login_required
 def crear_reserva(request):
-    cliente = getattr(request.user, 'cliente', None)
-    if not cliente or not cliente.perfil_confirmado:
-        messages.error(request, "Debes completar y confirmar tu perfil antes de hacer una reserva.")
-        return redirect('perfil_usuario')
-
-    if request.method == 'POST':
-        form = ReservaForm(request.POST)
-        if form.is_valid():
-            reserva = form.save(commit=False)
-            reserva.cliente = cliente  # Asigna el cliente automáticamente
-            reserva.save()
-            messages.success(request, "¡Reserva realizada correctamente!")
-            return redirect('mis_reservas')
+    if request.user.is_staff:
+        # Admin: elige el cliente
+        if request.method == 'POST':
+            form = ReservaFormAdmin(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('lista_reserva')
+        else:
+            form = ReservaFormAdmin()
     else:
-        form = ReservaForm()
-
+        # Usuario normal: el cliente es el usuario logueado
+        if request.method == 'POST':
+            form = ReservaForm(request.POST)
+            if form.is_valid():
+                reserva = form.save(commit=False)
+                reserva.cliente = request.user.cliente  # <--- Este es el cambio correcto
+                reserva.save()
+                return redirect('mis_reservas')
+        else:
+            form = ReservaForm()
     return render(request, 'reserva/crear_reserva.html', {'form': form})

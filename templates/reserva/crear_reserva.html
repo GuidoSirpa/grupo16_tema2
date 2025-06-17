@@ -9,9 +9,19 @@
     <h4 class="mb-0">Realizar nueva reserva</h4>
   </div>
   <div class="card-body">
-    <form method="post" novalidate>
+    <form method="post">
       {% csrf_token %}
       {{ form.non_field_errors }}
+
+      {# Solo mostrar el campo cliente si el usuario es admin #}
+      {% if user.is_staff %}
+        <div class="mb-3">
+          <label for="{{ form.cliente.id_for_label }}" class="form-label">Cliente</label>
+          {{ form.cliente }}
+          {{ form.cliente.errors }}
+        </div>
+      {% endif %}
+
       <div class="mb-3">
         <label for="{{ form.habitacion.id_for_label }}" class="form-label">Habitación</label>
         {{ form.habitacion }}
